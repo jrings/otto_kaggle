@@ -15,14 +15,16 @@ ids = train.pop("id")
 test_ids = test.pop("id")
 for col in train.columns:
     train[col + "_log"] = [np.log(x) if x else 0 for x in train[col]]
-    train[col + "_count"] = np.log([count_lk[col][x] for x in train[col]])
+    train[col + "_count"] = ([count_lk[col][x] for x in train[col]])
+    train[col + "_count"] = ([np.log(x) if x else 0 for x in train[col + "_count"]])
     test[col + "_log"] = [np.log(x) if x else 0 for x in test[col]]
-    test[col + "_count"] = np.log([count_lk[col][x] for x in test[col]])
+    test[col + "_count"] = ([count_lk[col][x] for x in test[col]])    
+    test[col + "_count"] = ([np.log(x) if x else 0 for x in test[col + "_count"]])
 
 print(train.head())
 
-model = GradientBoostingClassifier(random_state=1979, min_samples_split=3,
-                             max_depth=3, max_features="sqrt", n_estimators=400)
+model = GradientBoostingClassifier(random_state=1979, min_samples_split=7,
+                             max_depth=4, max_features="sqrt", n_estimators=800)
 print(np.mean(cross_val_score(model, np.array(train), y, scoring="log_loss", n_jobs=4, cv=4)))
 
 model.fit(np.array(train), y)
