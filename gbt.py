@@ -16,10 +16,10 @@ test_ids = test.pop("id")
 for col in train.columns:
     train["log_" + col] = [np.log(x) if x else 0 for x in train[col]]
     train["count_" + col] = ([count_lk[col][x] for x in train[col]])
-    train["count_" + col] = ([np.log(x) if x else 0 for x in train[col + "_count"]])
+    train["count_" + col] = ([np.log(x) if x else 0 for x in train["count_" + col]])
     test["log_" + col] = [np.log(x) if x else 0 for x in test[col]]
     test["count_" + col] = ([count_lk[col][x] for x in test[col]])    
-    test["count_" + col] = ([np.log(x) if x else 0 for x in test[col + "_count"]])
+    test["count_" + col] = ([np.log(x) if x else 0 for x in test["count_" + col]])
 
 
 combined = pd.concat((train,test))
